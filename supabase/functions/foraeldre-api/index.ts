@@ -6,7 +6,6 @@ import * as fi from './foraeldreintra.ts';
 import * as holdsport from './holdsport.ts';
 import { sendToAll, subscribe, unsubscribe, vapidPublicKey } from './push.ts';
 import { runSync } from './sync.ts';
-import { probeMitId } from './probe.ts';
 import { NeedsLoginError, sha256Hex } from './types.ts';
 
 declare const EdgeRuntime: { waitUntil(p: Promise<unknown>): void };
@@ -137,10 +136,6 @@ async function route(req: Request, path: string): Promise<unknown> {
     return { ok: true };
   }
 
-  if (m === 'POST' && path === '/probe/mitid') {
-    if (!(await isCron(req))) throw new HttpError(401, 'Nej.');
-    return { hops: await probeMitId('borneuni.m.skoleintra.dk') };
-  }
   if (m === 'POST' && path === '/sync') {
     if (!(await isCron(req))) await requireFamily(req);
     return await runSync();
