@@ -34,7 +34,9 @@ Funktionen har egen adgangskontrol: familiekode (`x-familiekode`) for appen,
   Serveren fornyer selv via login.aula.dk. Refresh-tokenet roterer – sync tager
   en lease-lås, så to kørsler aldrig fornyer samtidig.
 - **ForældreIntra:** vendoreret fra fskintra-mcp med `scripts/vendor-fskintra.sh`
-  (fast commit). Kun skolens eget forældrelogin, ikke UniLogin.
+  (fast commit). Kun skolens eget forældrelogin, ikke UniLogin/MitID: testet
+  2026-10-04 – fra Supabase stopper `broker.unilogin.dk` ved STIL's bot-tjek
+  (`security-check.stil.dk/NDBD`), før MitID nås.
 - **Holdsport:** officiel API, basic auth, ét login pr. barn.
 
 Første synk pr. kilde er tavs (baseline); derefter push ved nyt/ændret.
