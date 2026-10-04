@@ -264,12 +264,16 @@ function visIndstillinger() {
         <div class="raekker-lille"><button class="knap sekundaer lille" data-handling="aula-start">Log ind igen</button>
         <button class="knap fare lille" data-handling="aula-fra">Frakobl</button></div>` : h`
         <ol>
-          <li>Tryk <b>Åbn Aula-login</b>, vælg <b>Forælder</b> og godkend med MitID.</li>
-          <li>Du ender på en side, der ikke kan vises (<i>app-private.aula.dk</i>). Det er meningen.</li>
-          <li>Kopiér hele adressen fra adresselinjen, og indsæt den herunder.</li>
+          <li>Tryk <b>Lav login-link</b> og derefter <b>Kopiér link</b>.</li>
+          <li>Åbn Safari, indsæt linket i adresselinjen og tryk Gå. Et link, du selv skriver eller indsætter, åbner ikke Aula-appen.</li>
+          <li>Vælg <b>Forælder</b> og godkend med MitID.</li>
+          <li>Du ender på en side, der ikke kan vises (<i>app-private.aula.dk</i>). Det er meningen. Kopiér hele adressen, og indsæt den herunder.</li>
         </ol>
-        <p>Åbner Aula-appen i stedet, så tag loginet i en privat fane i Safari.</p>
-        <button class="knap" data-handling="aula-start">Åbn Aula-login</button>
+        <p>Springer Aula-appen alligevel op, så tryk på <b>aula.dk</b> øverst til højre i Aula-appen. Så åbner iPhone fremover aula.dk-links i Safari. Lav derefter et nyt link.</p>
+        ${aulaVent && gem.get('aulaUrl', '') ? h`<div class="raekker-lille">
+          <button class="knap" data-handling="aula-kopier">Kopiér link</button>
+          <button class="knap sekundaer lille" data-handling="aula-start">Nyt link</button></div>`
+        : h`<button class="knap" data-handling="aula-start">Lav login-link</button>`}
         ${aulaVent ? h`<label class="felt"><span>Adressen du landede på</span>
           <textarea id="aula-adresse" placeholder="https://app-private.aula.dk/?code=…" autocomplete="off" autocapitalize="off" spellcheck="false"></textarea>
           <small>Koden virker kun et par minutter.</small></label>
@@ -538,20 +542,24 @@ app.addEventListener('click', async (e) => {
       const r = await api('/push/test', { method: 'POST' });
       toast(r.leveret ? 'Testbesked sendt' : 'Ingen enheder modtog den');
     });
-    case 'aula-start': {
-      // Vinduet åbnes før await, ellers blokerer Safari det som popup.
-      const vindue = window.open('about:blank', '_blank');
-      return medKnap(t, async () => {
-        const { url } = await api('/aula/start', { method: 'POST' });
-        gem.set('aulaVent', true);
-        if (vindue) vindue.location.href = url; else location.href = url;
-        render();
-      });
+    case 'aula-start': return medKnap(t, async () => {
+      // Linket åbnes ikke herfra: et trykket aula.dk-link fanges af Aula-appen.
+      const { url } = await api('/aula/start', { method: 'POST' });
+      gem.set('aulaUrl', url);
+      gem.set('aulaVent', true);
+      render();
+    });
+    case 'aula-kopier': {
+      const url = gem.get('aulaUrl', '');
+      return navigator.clipboard.writeText(url)
+        .then(() => toast('Linket er kopieret. Indsæt det i Safari.'))
+        .catch(() => prompt('Kopiér linket:', url));
     }
     case 'aula-afslut': return medKnap(t, async () => {
       const adresse = document.getElementById('aula-adresse')?.value || '';
       await api('/aula/afslut', { method: 'POST', body: { adresse } });
       gem.set('aulaVent', false);
+      gem.set('aulaUrl', '');
       toast('Aula er forbundet. Henter data…');
       await hentIndstillinger();
       setTimeout(hent, 12000);
