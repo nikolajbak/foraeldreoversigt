@@ -28,11 +28,16 @@ const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '
 const h = (strings, ...vals) => strings.reduce((a, s, i) => a + s + (i < vals.length ? vals[i] : ''), '');
 
 async function api(path, { method = 'GET', body, kode = state.kode } = {}) {
-  const res = await fetch(API + path, {
-    method,
-    headers: { 'content-type': 'application/json', ...(kode ? { 'x-familiekode': kode } : {}) },
-    body: body ? JSON.stringify(body) : undefined,
-  });
+  let res;
+  try {
+    res = await fetch(API + path, {
+      method,
+      headers: { 'content-type': 'application/json', ...(kode ? { 'x-familiekode': kode } : {}) },
+      body: body ? JSON.stringify(body) : undefined,
+    });
+  } catch {
+    throw new Error(navigator.onLine ? 'Kunne ikke nå serveren. Prøv igen om lidt.' : 'Ingen internetforbindelse.');
+  }
   const data = await res.json().catch(() => ({}));
   if (res.status === 401) {
     if (path !== '/status') logUd('Familiekoden virker ikke længere. Indtast den igen.');

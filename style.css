@@ -68,7 +68,8 @@ a { color: var(--accent); }
 }
 .top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
 .top h1 { font-size: 30px; line-height: 1.1; letter-spacing: -.02em; margin: 0; font-weight: 700; }
-.top .dato { color: var(--ink-soft); font-size: 14px; margin-top: 4px; text-transform: capitalize; }
+.top .dato { color: var(--ink-soft); font-size: 14px; margin-top: 4px; }
+.top .dato::first-letter, .dag .dato2::first-letter { text-transform: uppercase; }
 .ikonknap {
   width: var(--tap); height: var(--tap); flex: none;
   display: grid; place-items: center;
@@ -104,7 +105,7 @@ a { color: var(--accent); }
 .sektion .antal { font-size: 13px; color: var(--ink-faint); }
 .dag { margin: 18px 0 6px; font-size: 15px; font-weight: 650; display: flex; gap: 8px; align-items: baseline; }
 .dag .rel { color: var(--warm); font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: .05em; }
-.dag .dato2 { color: var(--ink-soft); font-weight: 500; text-transform: capitalize; }
+.dag .dato2 { color: var(--ink-soft); font-weight: 500; display: inline-block; }
 
 .liste { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
 .raekke {
