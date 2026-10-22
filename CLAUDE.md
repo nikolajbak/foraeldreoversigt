@@ -16,7 +16,7 @@ push om nyt. Brugervejledning og kildeoplysninger: `README.md`.
 ## Kommandoer
 
 ```bash
-python3 -m http.server          # klienten lokalt (se .claude/launch.json)
+python3 -m http.server 8765     # klienten lokalt
 sh scripts/byg-api.sh           # → dist/foraeldre-api.js (kræver deno)
 sh scripts/vendor-fskintra.sh   # opdatér den vendorerede ForældreIntra-kode (fast commit)
 ```
