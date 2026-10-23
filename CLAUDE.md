@@ -81,3 +81,4 @@ Første synk pr. kilde er tavs (baseline); derefter push ved nyt eller ændret.
 
 - Dansk i brugerfladen og i navne.
 - Den vendorerede `fskintra/` rettes ikke i hånden; hent den igen med scriptet.
+- **Tokenforbrugende kørsler ligger uden for Anthropics spidstid** (Nikolaj 2026-10-23): hverdage 05–11 PT ≈ 14–20 dansk tid. En planlagt kørsel, der kalder en model (routine, Actions, pg_cron → edge-funktion), startes ikke man–fre kl. 12:00–18:59 UTC (dækker både sommer- og vintertid); weekenden er fri. Brugerudløste og tidskritiske kørsler (kundebeskeder, ordrer, påmindelser på et fast klokkeslæt) er undtaget. Synkroniseringen kalder ingen model pr. 2026-10-23.
