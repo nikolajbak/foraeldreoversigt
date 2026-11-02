@@ -2,6 +2,12 @@
 // Forældreoversigt — samler Aula, ForældreIntra og Holdsport.
 // Al hentning sker i edge-funktionen foraeldre-api; appen viser kun resultatet.
 
+// Appen må ikke zoome. iOS ignorerer user-scalable=no i viewporten, så knibet stoppes her;
+// dobbelttrykket stoppes af touch-action i stilarket.
+for (const t of ['gesturestart', 'gesturechange', 'gestureend']) {
+  document.addEventListener(t, (e) => e.preventDefault(), { passive: false });
+}
+
 const API = 'https://gjycsqshkvkcupdnvgvf.supabase.co/functions/v1/foraeldre-api';
 const KILDE = { aula: 'Aula', holdsport: 'Holdsport', 'forældreintra': 'ForældreIntra' };
 const TZ = 'Europe/Copenhagen';
